@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 260" width="1180" height="260" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<rect width="1180" height="260" fill="white"/>
+<rect x="0.0" y="20" width="219.0" height="240" fill="white"/>
+<text x="109.5" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="#999">ZONE 1</text>
+<rect x="219.0" y="20" width="318.0" height="240" fill="#f3f3f3"/>
+<text x="378.0" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="#999">ZONE 2</text>
+<rect x="537.0" y="20" width="247.3" height="240" fill="white"/>
+<text x="660.7" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="#999">ZONE 3</text>
+<rect x="784.3" y="20" width="176.7" height="240" fill="#f3f3f3"/>
+<text x="872.7" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="#999">ZONE 4</text>
+<rect x="961.0" y="20" width="70.7" height="240" fill="white"/>
+<text x="996.3" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="#999">ZONE 5</text>
+<rect x="1031.7" y="20" width="148.3" height="240" fill="#f3f3f3"/>
+<text x="1105.8" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="#999">ZONE 6</text>
+<line x1="60" y1="70" x2="1120.0" y2="70" stroke="#C8102E" stroke-width="10" stroke-linecap="round"/>
+<circle cx="60.0" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(65.0,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">San Francisco</text>
+<circle cx="95.3" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(100.3,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">22nd Street</text>
+<circle cx="130.7" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(135.7,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Bayshore</text>
+<circle cx="166.0" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(171.0,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">South San Francisco</text>
+<circle cx="201.3" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(206.3,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">San Bruno</text>
+<circle cx="236.7" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(241.7,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">Millbrae</text>
+<circle cx="272.0" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(277.0,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Broadway</text>
+<circle cx="307.3" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(312.3,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Burlingame</text>
+<circle cx="342.7" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(347.7,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">San Mateo</text>
+<circle cx="378.0" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(383.0,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Hayward Park</text>
+<circle cx="413.3" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(418.3,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">Hillsdale</text>
+<circle cx="448.7" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(453.7,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Belmont</text>
+<circle cx="484.0" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(489.0,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">San Carlos</text>
+<circle cx="519.3" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(524.3,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">Redwood City</text>
+<circle cx="554.7" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(559.7,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Menlo Park</text>
+<circle cx="590.0" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(595.0,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">Palo Alto</text>
+<circle cx="625.3" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(630.3,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Stanford</text>
+<circle cx="660.7" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(665.7,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">California Avenue</text>
+<circle cx="696.0" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(701.0,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">San Antonio</text>
+<circle cx="731.3" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(736.3,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">Mountain View</text>
+<circle cx="766.7" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(771.7,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">Sunnyvale</text>
+<circle cx="802.0" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(807.0,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Lawrence</text>
+<circle cx="837.3" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(842.3,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Santa Clara</text>
+<circle cx="872.7" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(877.7,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">College Park</text>
+<circle cx="908.0" cy="70" r="9" fill="white" stroke="#C8102E" stroke-width="4"/>
+<text transform="translate(913.0,92) rotate(55)" font-size="13" fill="#111" font-weight="bold">San Jose Diridon</text>
+<circle cx="943.3" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(948.3,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Tamien</text>
+<circle cx="978.7" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(983.7,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Capitol</text>
+<circle cx="1014.0" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(1019.0,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Blossom Hill</text>
+<circle cx="1049.3" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(1054.3,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Morgan Hill</text>
+<circle cx="1084.7" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(1089.7,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">San Martin</text>
+<circle cx="1120.0" cy="70" r="6" fill="white" stroke="#C8102E" stroke-width="3"/>
+<text transform="translate(1125.0,92) rotate(55)" font-size="13" fill="#58595B" font-weight="normal">Gilroy</text>
+<text x="60" y="46" font-size="12" font-weight="bold" fill="#999">NORTH</text><text x="1120.0" y="46" text-anchor="end" font-size="12" font-weight="bold" fill="#999">SOUTH</text>
+</svg>

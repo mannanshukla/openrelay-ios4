@@ -1,0 +1,74 @@
+/* apple.com, 2010: Myriad, light gray, one idea per section */
+html,body{margin:0;padding:0}
+body{font-family:"Myriad Pro","Myriad Set Pro","Lucida Grande","Helvetica Neue",Helvetica,Arial,sans-serif;color:#333;font-size:14px;line-height:1.5;background:#fff}
+a{color:#08c;text-decoration:none}a:hover{text-decoration:underline}
+.wrap{width:980px;max-width:94%;margin:0 auto}
+/* global nav: the gray glossy bar */
+#gn{height:38px;background:linear-gradient(#6b6b6b,#444 50%,#3a3a3a 51%,#2a2a2a);border-bottom:1px solid #1a1a1a;box-shadow:0 1px 2px rgba(0,0,0,.4)}
+#gn ul{list-style:none;margin:0 auto;padding:0;display:flex;width:980px;max-width:94%}
+#gn .burger,#gn #menu{display:none}
+#gn li{flex:1;text-align:center;border-left:1px solid #222;border-right:1px solid #555}
+#gn li:first-child{border-left:0}#gn li:last-child{border-right:0}
+#gn a{display:block;line-height:38px;color:#eee;font-size:14px;text-shadow:0 -1px 0 #000}
+#gn a.home svg{vertical-align:middle;display:inline-block}
+#gn a:hover{text-decoration:none;background:linear-gradient(#333,#111)}
+#gn li.on a{background:linear-gradient(#2a2a2a,#111);color:#fff;box-shadow:inset 0 2px 4px rgba(0,0,0,.6)}
+/* product subnav: rounded light tabs */
+#sub{background:linear-gradient(#fafafa,#e8e8e8);border-bottom:1px solid #c8c8c8;height:36px}
+#sub .wrap{display:flex;align-items:center;height:36px}
+#sub .name{font-size:18px;color:#222;font-weight:bold;letter-spacing:-.3px}
+#sub nav{margin-left:auto;display:flex;gap:4px}
+#sub nav a{color:#333;font-size:13px;padding:4px 12px;border-radius:12px}
+#sub nav a.on,#sub nav a:hover{background:#d0d0d0;text-decoration:none}
+#sub nav a.buy{background:linear-gradient(#b6ea4e,#75be1a);color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,.35);border:1px solid #5c9e0d}
+/* hero */
+.hero{text-align:center;padding:40px 0 20px;background:linear-gradient(#fff,#f2f2f2);border-bottom:1px solid #e3e3e3}
+.hero h1{font-size:56px;font-weight:normal;letter-spacing:-2px;color:#111;margin:0 0 6px;line-height:1.05}
+.hero h2{font-size:22px;font-weight:normal;color:#666;margin:0 0 24px}
+.hero img{max-width:100%;height:auto;display:block;margin:0 auto}
+/* feature rows */
+.feature{display:flex;align-items:center;gap:40px;padding:48px 0;border-bottom:1px solid #e6e6e6}
+.feature.flip{flex-direction:row-reverse}
+.feature .pic{flex:none;width:300px}
+.feature .pic img{width:300px;display:block}
+.feature .txt h3{font-size:34px;font-weight:normal;letter-spacing:-1px;color:#111;margin:0 0 10px;line-height:1.1}
+.feature .txt p{font-size:17px;color:#555;margin:0;max-width:520px}
+.feature .txt p+p{margin-top:12px}
+/* overview cards (home) */
+.trio{display:flex;gap:16px;padding:36px 0 20px}
+.trio a.card{flex:1;text-align:center;color:#333;padding:20px 10px 24px;border-radius:10px;border:1px solid #e3e3e3;background:linear-gradient(#fff,#f3f3f3)}
+.trio a.card:hover{text-decoration:none;border-color:#bbb}
+.trio img{width:140px;display:block;margin:0 auto 14px}
+.trio h3{font-size:21px;font-weight:normal;letter-spacing:-.8px;color:#111;margin:0 0 4px}
+.trio p{font-size:14px;color:#666;margin:0 0 10px}
+.trio .more{color:#08c;font-size:14px}
+/* buy box */
+.buy{text-align:center;padding:40px 0}
+.btn{display:inline-block;padding:11px 26px;font-size:16px;color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,.4);border:1px solid #5c9e0d;border-radius:5px;background:linear-gradient(#b6ea4e,#8fd12e 50%,#75be1a 51%,#5c9e0d);box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.btn:hover{text-decoration:none;background:linear-gradient(#c3f064,#9cdb3a 50%,#80c923 51%,#66aa12)}
+.buy small{display:block;color:#888;font-size:12px;margin-top:10px}
+/* install page */
+ol.steps{margin:20px 0;padding:0 0 0 22px;font-size:16px;color:#444}
+ol.steps li{margin:0 0 14px}
+code{font-family:Menlo,Monaco,monospace;font-size:13px;background:#f3f3f3;border:1px solid #ddd;border-radius:3px;padding:1px 5px}
+footer{text-align:center;color:#888;font-size:11px;padding:30px 0 40px;border-top:1px solid #e6e6e6;margin-top:30px}
+@media (max-width:760px){.hero h1{font-size:36px;letter-spacing:-1px}.hero h2{font-size:17px}.feature,.feature.flip{flex-direction:column;text-align:center;padding:32px 0}.feature .pic,.feature .pic img{width:220px}.feature .txt h3{font-size:26px}.trio{flex-direction:column}#gn a{font-size:12px}#sub .name{font-size:15px}#sub nav a{padding:4px 8px;font-size:12px}}
+
+.ct .hero{background:linear-gradient(#fff,#f7f7f7)}.ct .hero h1{color:#C8102E}.ct #sub .buy,.ct .btn{background:#C8102E;border-color:#8e0b20}.ct .line{display:block;width:100%;max-width:1180px;margin:0 auto 10px;border:1px solid #e3e3e3;border-radius:10px;background:#fff}.ct .feature .txt h3 em{color:#C8102E;font-style:normal}.ct .board{display:inline-block;background:#111;color:#FFB000;font-family:"Courier New",Courier,monospace;font-weight:bold;font-size:15px;letter-spacing:1px;padding:8px 14px;border-radius:6px;margin:0 0 14px}
+
+@media (max-width:760px){
+#gn{height:auto;min-height:38px;position:relative}
+#gn ul{display:block;width:100%;max-width:100%}
+#gn li{display:none;border:0;text-align:left}
+#gn li:first-child{display:block;width:60px}
+#gn li:first-child a{padding-left:16px}
+#gn a{font-size:15px;padding:0 16px;border-top:1px solid #222}
+#gn .burger{display:block;position:absolute;right:12px;top:0;width:44px;height:38px;line-height:38px;text-align:center;color:#eee;font-size:22px;cursor:pointer}
+#gn #menu:checked ~ ul li{display:block}
+#gn #menu:checked ~ .burger{color:#fff}
+#sub{height:auto}#sub .wrap{height:auto;flex-wrap:wrap;padding:6px 0}
+#sub .name{width:100%;margin-bottom:4px}#sub nav{margin-left:0}
+}
+.ct .hero .agencies{margin:0 0 18px}.ct .hero .agencies img{vertical-align:middle;margin:0 14px}.ct .feature .txt p img{display:inline-block;margin:0}
+.ct .hero .agencies img,.ct .hero p.agencies img{height:34px;width:auto;max-width:none;display:inline-block;margin:0 14px 10px}
+@media (max-width:760px){.ct .hero .agencies img,.ct .hero p.agencies img{height:26px;margin:0 8px 8px}.ct .feature .txt p img{height:32px;width:auto}}
