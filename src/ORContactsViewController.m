@@ -62,10 +62,14 @@
     NSDate *d = [NSDate dateWithTimeIntervalSince1970:[ts doubleValue]];
     NSDateFormatter *f = [[[NSDateFormatter alloc] init] autorelease];
     NSCalendar *cal = [NSCalendar currentCalendar];
+    // like Messages: a time today, "Yesterday", the weekday within the week, then a date
     NSDateComponents *a = [cal components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:d];
     NSDateComponents *b = [cal components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:[NSDate date]];
-    BOOL today = [a year] == [b year] && [a month] == [b month] && [a day] == [b day];
-    [f setDateFormat:today ? @"h:mm a" : @"M/d/yy"];
+    NSInteger days = [[cal components:NSDayCalendarUnit fromDate:[cal dateFromComponents:a] toDate:[cal dateFromComponents:b] options:0] day];
+    if (days <= 0) [f setDateFormat:@"h:mm a"];
+    else if (days == 1) return @"Yesterday";
+    else if (days < 7) [f setDateFormat:@"EEEE"];
+    else [f setDateFormat:@"M/d/yy"];
     return [f stringFromDate:d];
 }
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s { return [[ORContacts all] count]; }
