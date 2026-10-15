@@ -39,8 +39,7 @@
         if ([t length]) return [t stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
         if ([[m objectForKey:@"image"] length]) return @"Photo";
     }
-    NSString *p = [c objectForKey:@"prompt"];
-    return [p length] ? [[p componentsSeparatedByString:@"."] objectAtIndex:0] : @"No messages yet";
+    return @"No messages yet. Say hi.";
 }
 - (NSString *)timeFor:(NSDictionary *)c {
     NSArray *h = [[NSUserDefaults standardUserDefaults] arrayForKey:[ORContacts historyKey:[c objectForKey:@"id"]]];
