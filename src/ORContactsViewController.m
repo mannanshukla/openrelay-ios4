@@ -31,12 +31,26 @@
     [self.navigationController pushViewController:chat animated:animated];
     [chat release];
 }
+- (NSString *)flatten:(NSString *)t {   // one line of plain text for the preview: no list dashes, headings or **bold** marks
+    for (NSString *m in [NSArray arrayWithObjects:@"**", @"__", @"`", nil]) t = [t stringByReplacingOccurrencesOfString:m withString:@""];
+    NSMutableArray *out = [NSMutableArray array];
+    for (NSString *line in [t componentsSeparatedByString:@"\n"]) {
+        NSString *l = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        while ([l hasPrefix:@"#"]) l = [l substringFromIndex:1];
+        for (NSString *b in [NSArray arrayWithObjects:@"- ", @"* ", @"\u2022 ", nil]) if ([l hasPrefix:b]) l = [l substringFromIndex:[b length]];
+        NSUInteger d = 0; while (d < [l length] && isdigit([l characterAtIndex:d])) d++;
+        if (d > 0 && d + 1 < [l length] && ([l characterAtIndex:d] == '.' || [l characterAtIndex:d] == ')') && [l characterAtIndex:d + 1] == ' ') l = [l substringFromIndex:d + 2];
+        l = [l stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if ([l length]) [out addObject:l];
+    }
+    return [out componentsJoinedByString:@" "];
+}
 - (NSString *)previewFor:(NSDictionary *)c {
     NSArray *h = [[NSUserDefaults standardUserDefaults] arrayForKey:[ORContacts historyKey:[c objectForKey:@"id"]]];
     for (NSDictionary *m in [h reverseObjectEnumerator]) {
         if ([[m objectForKey:@"hidden"] boolValue]) continue;
         NSString *t = [m objectForKey:@"content"];
-        if ([t length]) return [t stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+        if ([t length]) return [self flatten:t];
         if ([[m objectForKey:@"image"] length]) return @"Photo";
     }
     return @"No messages yet. Say hi.";
