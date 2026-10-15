@@ -1,7 +1,6 @@
 #import "ORContactsViewController.h"
 #import "ORContactEditViewController.h"
 #import "ORChatViewController.h"
-#import "ORSettingsViewController.h"
 #import "ORContacts.h"
 #import "ORClient.h"
 
@@ -9,7 +8,6 @@
 - (id)init {
     if ((self = [super initWithStyle:UITableViewStylePlain])) {
         self.title = @"Messages";
-        self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStyleBordered target:self action:@selector(openSettings)] autorelease];
         self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(addContact)] autorelease];
     }
     return self;
@@ -18,14 +16,9 @@
 - (void)viewWillAppear:(BOOL)animated { [super viewWillAppear:animated]; [self.tableView reloadData]; }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (![[ORSettings apiKey] length]) [self openSettings];
+    if (![[ORSettings apiKey] length]) [self performSelector:@selector(needKey) withObject:nil afterDelay:0.6];
 }
-- (void)openSettings {
-    ORSettingsViewController *s = [[ORSettingsViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:s];
-    nav.navigationBar.tintColor = self.navigationController.navigationBar.tintColor;
-    [self presentModalViewController:nav animated:YES]; [nav release]; [s release];
-}
+- (void)needKey { UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Add your OpenRelay key" message:@"Open the Settings app, scroll to OpenRelay, and paste your API key. Model, pacing, sounds and the daily texts live there too." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]; [a show]; [a release]; }
 - (void)addContact {
     ORContactEditViewController *e = [[ORContactEditViewController alloc] initWithContact:nil];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:e];

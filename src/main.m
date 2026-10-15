@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import "ORClient.h"
 #import "ORContactsViewController.h"
 #import "ORChatViewController.h"
 #import "ORContacts.h"
@@ -41,7 +42,8 @@
 - (void)applicationDidBecomeActive:(UIApplication *)app {
     app.applicationIconBadgeNumber = 0;
     [[ORUnprompted shared] deliverDue];
-    [[ORUnprompted shared] performSelector:@selector(topUp) withObject:nil afterDelay:4.0];
+    if ([ORSettings unpromptedPerDay] <= 0) [[ORUnprompted shared] cancelAll];   // the per-day setting now lives in the Settings app, so reconcile on every return
+    else [[ORUnprompted shared] performSelector:@selector(topUp) withObject:nil afterDelay:4.0];
 }
 - (void)dealloc { [contacts release]; [nav release]; [window release]; [super dealloc]; }
 @end

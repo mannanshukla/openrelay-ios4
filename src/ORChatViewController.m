@@ -1,6 +1,5 @@
 #import "ORChatViewController.h"
 #import "ORBubbleCell.h"
-#import "ORSettingsViewController.h"
 #import "ORContacts.h"
 #import "ORImage.h"
 #import "ORJSON.h"
