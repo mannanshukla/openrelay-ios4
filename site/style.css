@@ -35,8 +35,8 @@ a{color:#08c;text-decoration:none}a:hover{text-decoration:underline}
 .feature .txt p{font-size:17px;color:#555;margin:0;max-width:520px}
 .feature .txt p+p{margin-top:12px}
 /* overview cards (home) */
-.trio{display:flex;gap:16px;padding:36px 0 20px}
-.trio a.card{flex:1;text-align:center;color:#333;padding:20px 10px 24px;border-radius:10px;border:1px solid #e3e3e3;background:linear-gradient(#fff,#f3f3f3)}
+.trio{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;padding:36px 0 20px}
+.trio a.card{flex:0 1 calc(25% - 12px);box-sizing:border-box;text-align:center;color:#333;padding:20px 10px 24px;border-radius:10px;border:1px solid #e3e3e3;background:linear-gradient(#fff,#f3f3f3)}
 .trio a.card:hover{text-decoration:none;border-color:#bbb}
 .trio img{width:140px;display:block;margin:0 auto 14px}
 .trio h3{font-size:21px;font-weight:normal;letter-spacing:-.8px;color:#111;margin:0 0 4px}
@@ -52,7 +52,7 @@ ol.steps{margin:20px 0;padding:0 0 0 22px;font-size:16px;color:#444}
 ol.steps li{margin:0 0 14px}
 code{font-family:Menlo,Monaco,monospace;font-size:13px;background:#f3f3f3;border:1px solid #ddd;border-radius:3px;padding:1px 5px}
 footer{text-align:center;color:#888;font-size:11px;padding:30px 0 40px;border-top:1px solid #e6e6e6;margin-top:30px}
-@media (max-width:760px){.hero h1{font-size:36px;letter-spacing:-1px}.hero h2{font-size:17px}.feature,.feature.flip{flex-direction:column;text-align:center;padding:32px 0}.feature .pic,.feature .pic img{width:220px}.feature .txt h3{font-size:26px}.trio{flex-direction:column}#gn a{font-size:12px}#sub .name{font-size:15px}#sub nav a{padding:4px 8px;font-size:12px}}
+@media (max-width:760px){.hero h1{font-size:36px;letter-spacing:-1px}.hero h2{font-size:17px}.feature,.feature.flip{flex-direction:column;text-align:center;padding:32px 0}.feature .pic,.feature .pic img{width:220px}.feature .txt h3{font-size:26px}.trio{flex-direction:column}.trio a.card{flex:1 1 auto}#gn a{font-size:12px}#sub .name{font-size:15px}#sub nav a{padding:4px 8px;font-size:12px}}
 
 .ct .hero{background:linear-gradient(#fff,#f7f7f7)}.ct .hero h1{color:#C8102E}.ct #sub .buy,.ct .btn{background:#C8102E;border-color:#8e0b20}.ct .line{display:block;width:100%;max-width:1180px;margin:0 auto 10px;border:1px solid #e3e3e3;border-radius:10px;background:#fff}.ct .feature .txt h3 em{color:#C8102E;font-style:normal}.ct .board{display:inline-block;background:#111;color:#FFB000;font-family:"Courier New",Courier,monospace;font-weight:bold;font-size:15px;letter-spacing:1px;padding:8px 14px;border-radius:6px;margin:0 0 14px}
 
