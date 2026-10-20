@@ -8,6 +8,7 @@
 @property (nonatomic, copy) NSString *role;
 @property (nonatomic, copy) NSString *timestamp;   // nil = no timestamp row above the bubble
 + (CGFloat)heightForText:(NSString *)text image:(UIImage *)img timestamp:(BOOL)hasTimestamp delivered:(BOOL)delivered;
++ (CGFloat)heightForText:(NSString *)text imageSize:(CGSize)imageSize timestamp:(BOOL)hasTimestamp delivered:(BOOL)delivered;   // same, from the photo's pixel size
 + (CGFloat)typingHeight;
 + (CGSize)imageDrawSize:(UIImage *)img;
 @end

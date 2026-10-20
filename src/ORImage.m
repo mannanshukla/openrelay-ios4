@@ -21,16 +21,18 @@ static const char b64tab[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx
     }
     return [[[NSString alloc] initWithBytes:o length:j encoding:NSASCIIStringEncoding] autorelease];
 }
-+ (NSData *)dataFromBase64:(NSString *)s {
-    NSUInteger n = [s length]; NSMutableData *out = [NSMutableData dataWithCapacity:n * 3 / 4];
++ (NSData *)dataFromBase64:(NSString *)s {   // works on a plain copy of the characters: a photo is ~40k of them
+    NSUInteger n = [s length]; unichar *in = malloc(MAX(n, 1) * sizeof(unichar)); [s getCharacters:in range:NSMakeRange(0, n)];
+    NSMutableData *out = [NSMutableData dataWithLength:n * 3 / 4 + 3]; unsigned char *o = [out mutableBytes]; NSUInteger j = 0;
     int val = 0, bits = 0;
     for (NSUInteger i = 0; i < n; i++) {
-        unichar c = [s characterAtIndex:i]; int v;
+        unichar c = in[i]; int v;
         if (c >= 'A' && c <= 'Z') v = c - 'A'; else if (c >= 'a' && c <= 'z') v = c - 'a' + 26;
         else if (c >= '0' && c <= '9') v = c - '0' + 52; else if (c == '+') v = 62; else if (c == '/') v = 63; else continue;
-        val = (val << 6) | v; bits += 6;
-        if (bits >= 8) { bits -= 8; unsigned char b = (val >> bits) & 0xFF; [out appendBytes:&b length:1]; }
+        val = ((val << 6) | v) & 0xFFFFFF; bits += 6;
+        if (bits >= 8) { bits -= 8; o[j++] = (val >> bits) & 0xFF; }
     }
+    free(in); [out setLength:j];
     return out;
 }
 + (UIImage *)scale:(UIImage *)img maxSide:(CGFloat)maxSide {

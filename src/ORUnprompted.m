@@ -98,7 +98,8 @@ static NSString *kSched = @"or_scheduled";
     NSString *text = [[buf stringByReplacingOccurrencesOfString:@"\n\n" withString:@" "] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([text hasPrefix:@"\""] && [text hasSuffix:@"\""] && [text length] > 2) text = [text substringWithRange:NSMakeRange(1, [text length]-2)];
     if ([text length] > 240) text = [[text substringToIndex:240] stringByAppendingString:@"..."];
-    if ([text length] && generating) {
+    BOOL filed = [text length] && generating;
+    if (filed) {
         NSString *cid = [generating objectForKey:@"id"], *name = [generating objectForKey:@"name"];
         NSMutableArray *sched = [self scheduled];
         [sched addObject:[NSDictionary dictionaryWithObjectsAndKeys:cid, @"contact", [NSNumber numberWithDouble:generatingTs], @"ts", text, @"text", nil]];
@@ -111,7 +112,7 @@ static NSString *kSched = @"or_scheduled";
         [[UIApplication sharedApplication] scheduleLocalNotification:n]; [n release];
     }
     [generating release]; generating = nil;
-    [self performSelector:@selector(topUp) withObject:nil afterDelay:2.0];   // keep filling the window
+    if (filed) [self performSelector:@selector(topUp) withObject:nil afterDelay:2.0];   // keep filling the window; an empty reply waits for the next launch or chat instead of asking again every 2 s
 }
 - (void)client:(id)c didFailWithMessage:(NSString *)m { busy = NO; [generating release]; generating = nil; }
 @end

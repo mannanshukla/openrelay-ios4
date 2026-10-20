@@ -55,18 +55,22 @@ static void loadSounds(void) {
         client = [[ORClient alloc] init]; client.delegate = self;
         client.personaPrompt = [c objectForKey:@"prompt"];
         client.modelOverride = [c objectForKey:@"model"];
-        imageCache = [[NSMutableDictionary alloc] init];
+        imageCache = [[NSMutableDictionary alloc] init]; imageSizes = [[NSMutableDictionary alloc] init];
         burstQueue = [[NSMutableArray alloc] init];
         loadSounds();
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];   // a decoded photo is ~800 KB; they come back from base64 when scrolled to
+        [nc addObserver:self selector:@selector(dropImages) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+        [nc addObserver:self selector:@selector(dropImages) name:UIApplicationDidEnterBackgroundNotification object:nil];
     }
     return self;
 }
+- (void)dropImages { [imageCache removeAllObjects]; }
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [burstTimer invalidate]; [typingTimer invalidate];
     client.delegate = nil; [client release]; [messages release]; [pending release]; [burstQueue release];
     [table release]; [inputBar release]; [input release]; [sendButton release]; [cameraButton release]; [spinner release];
-    [attachedImage release]; [attachedBase64 release]; [imageCache release]; [contact release]; [historyKey release]; [menuRow release];
+    [attachedImage release]; [attachedBase64 release]; [imageCache release]; [imageSizes release]; [visibleRows release]; [contact release]; [historyKey release]; [menuRow release];
     [super dealloc];
 }
 
@@ -124,7 +128,7 @@ static void loadSounds(void) {
     [sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
     [inputBar addSubview:sendButton];
 
-    spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    if (!spinner) spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStyleBordered target:self action:@selector(clearChat)] autorelease];
 }
 - (void)viewDidLoad {
@@ -133,6 +137,13 @@ static void loadSounds(void) {
     [nc addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [nc addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [nc addObserver:self selector:@selector(historyChanged:) name:ORHistoryChangedNotification object:nil];
+}
+- (void)viewDidUnload {   // a memory warning under the camera or mail sheet drops the view; let go of it so loadView's new one doesn't leak the old
+    [super viewDidUnload];
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc removeObserver:self name:UIKeyboardWillShowNotification object:nil]; [nc removeObserver:self name:UIKeyboardWillHideNotification object:nil]; [nc removeObserver:self name:ORHistoryChangedNotification object:nil];
+    table.dataSource = nil; table.delegate = nil;
+    [table release]; table = nil; [inputBar release]; inputBar = nil; [input release]; input = nil; [sendButton release]; sendButton = nil; [cameraButton release]; cameraButton = nil;
 }
 - (void)historyChanged:(NSNotification *)n {
     if (![[n object] isEqualToString:[contact objectForKey:@"id"]] || client.running) return;
@@ -180,11 +191,13 @@ static void loadSounds(void) {
 }
 
 #pragma mark history helpers
-- (NSArray *)visible {   // rows shown in the table: non-hidden messages, plus a typing bubble at the end
+- (NSArray *)visible {   // rows shown in the table: non-hidden messages, plus a typing bubble at the end; built once per reload, not once per row
+    if (visibleRows) return visibleRows;
     NSMutableArray *v = [NSMutableArray arrayWithCapacity:[messages count] + 1];
     for (NSDictionary *m in messages) if (![[m objectForKey:@"hidden"] boolValue]) [v addObject:m];
     if (typing) [v addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"typing", @"role", @"", @"content", nil]];
-    return v;
+    visibleRows = [v copy];
+    return visibleRows;
 }
 - (void)persist {
     [[NSUserDefaults standardUserDefaults] setObject:messages forKey:historyKey];
@@ -194,7 +207,7 @@ static void loadSounds(void) {
     return [NSDictionary dictionaryWithObjectsAndKeys:@"assistant", @"role", text, @"content", ts, @"ts", nil];
 }
 - (NSNumber *)now { return [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]; }
-- (void)reload { [table reloadData]; }
+- (void)reload { [visibleRows release]; visibleRows = nil; [table reloadData]; }
 - (void)playSound:(SystemSoundID)s { if ([ORSettings sounds] && s) AudioServicesPlaySystemSound(s); }
 
 #pragma mark typing indicator
@@ -222,7 +235,7 @@ static void loadSounds(void) {
 - (void)doClear {
     [client cancel]; [pending release]; pending = nil; [burstQueue removeAllObjects]; [burstTimer invalidate]; [burstTimer release]; burstTimer = nil;
     [self setTyping:NO]; [self setBusy:NO];
-    [messages removeAllObjects]; [imageCache removeAllObjects]; [self persist]; [self reload];
+    [messages removeAllObjects]; [imageCache removeAllObjects]; [imageSizes removeAllObjects]; [self persist]; [self reload];
 }
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     if (motion != UIEventSubtypeMotionShake) return;
@@ -492,7 +505,12 @@ static void loadSounds(void) {
         br = [pending rangeOfString:@"\n\n"];
     }
     [messages replaceObjectAtIndex:last withObject:[self assistantMessage:[pending stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]] ts:ts]];
-    [self reload]; [self scrollToBottom:NO];
+    // most tokens only grow the last bubble: reload that one row instead of redrawing every bubble on screen per token
+    [visibleRows release]; visibleRows = nil;
+    NSInteger n = [[self visible] count];
+    if (n && n == [table numberOfRowsInSection:0]) [table reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:n-1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    else [self reload];
+    [self scrollToBottom:NO];
 }
 - (void)clientDidFinish:(id)c {
     [[ORUnprompted shared] performSelector:@selector(topUp) withObject:nil afterDelay:3.0];   // use idle time to stock the day's texts
@@ -523,14 +541,17 @@ static void loadSounds(void) {
     NSInteger n = [[self visible] count];
     if (n) [table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:n-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:animated];
 }
+- (BOOL)showsTimestampForRow:(NSInteger)row inVisible:(NSArray *)v {   // a time label opens a thread and follows any 15 minute gap
+    NSNumber *ts = [[v objectAtIndex:row] objectForKey:@"ts"];
+    if (!ts) return NO;
+    if (row > 0) { NSNumber *prev = [[v objectAtIndex:row-1] objectForKey:@"ts"]; if (prev && [ts doubleValue] - [prev doubleValue] < 15*60) return NO; }
+    return YES;
+}
 - (NSString *)timestampForRow:(NSInteger)row inVisible:(NSArray *)v {
-    NSDictionary *m = [v objectAtIndex:row];
-    NSNumber *ts = [m objectForKey:@"ts"];
-    if (!ts) return nil;
-    if (row > 0) { NSNumber *prev = [[v objectAtIndex:row-1] objectForKey:@"ts"]; if (prev && [ts doubleValue] - [prev doubleValue] < 15*60) return nil; }
+    if (![self showsTimestampForRow:row inVisible:v]) return nil;
     static NSDateFormatter *df = nil;
     if (!df) { df = [[NSDateFormatter alloc] init]; [df setDateFormat:@"MMM d, yyyy h:mm a"]; }
-    return [df stringFromDate:[NSDate dateWithTimeIntervalSince1970:[ts doubleValue]]];
+    return [df stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[[v objectAtIndex:row] objectForKey:@"ts"] doubleValue]]];
 }
 - (UIImage *)imageFor:(NSDictionary *)m {
     NSString *b64 = [m objectForKey:@"image"];
@@ -540,13 +561,21 @@ static void loadSounds(void) {
     if (!img) { img = [ORImage imageFromBase64:b64]; if (img) [imageCache setObject:img forKey:key]; }
     return img;
 }
+- (CGSize)imageSizeFor:(NSDictionary *)m {   // heights for every row need only the photo's size, not the photo
+    NSString *b64 = [m objectForKey:@"image"];
+    if (![b64 length]) return CGSizeZero;
+    id key = [m objectForKey:@"ts"] ?: b64;
+    NSValue *v = [imageSizes objectForKey:key];
+    if (!v) { UIImage *img = [imageCache objectForKey:key] ?: [ORImage imageFromBase64:b64]; v = [NSValue valueWithCGSize:img ? img.size : CGSizeZero]; [imageSizes setObject:v forKey:key]; }
+    return [v CGSizeValue];
+}
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s { return [[self visible] count]; }
 - (CGFloat)tableView:(UITableView *)tv heightForRowAtIndexPath:(NSIndexPath *)ip {
     NSArray *v = [self visible]; NSDictionary *m = [v objectAtIndex:ip.row];
     if ([[m objectForKey:@"role"] isEqualToString:@"typing"]) return [ORBubbleView typingHeight];
-    NSString *t = [m objectForKey:@"content"]; UIImage *img = [self imageFor:m];
-    if (![t length] && !img) t = @"...";
-    return [ORBubbleView heightForText:t image:img timestamp:([self timestampForRow:ip.row inVisible:v] != nil) delivered:[[m objectForKey:@"delivered"] boolValue]];
+    NSString *t = [m objectForKey:@"content"]; CGSize isz = [self imageSizeFor:m];
+    if (![t length] && isz.width <= 0) t = @"...";
+    return [ORBubbleView heightForText:t imageSize:isz timestamp:[self showsTimestampForRow:ip.row inVisible:v] delivered:[[m objectForKey:@"delivered"] boolValue]];
 }
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)ip {
     static NSString *rid = @"bubble";

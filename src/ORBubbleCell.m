@@ -16,7 +16,7 @@ static void fillGradient(CGContextRef ctx, CGRect r, const CGFloat *c, size_t n)
 }
 
 @implementation ORStyle
-+ (UIFont *)messageFont { return [UIFont fontWithName:@"Helvetica" size:15] ?: [UIFont systemFontOfSize:15]; }
++ (UIFont *)messageFont { static UIFont *f = nil; if (!f) f = [([UIFont fontWithName:@"Helvetica" size:15] ?: [UIFont systemFontOfSize:15]) retain]; return f; }
 + (UIImage *)sendButtonImage:(BOOL)enabled {
     CGSize sz = CGSizeMake(64, 27);
     UIGraphicsBeginImageContextWithOptions(sz, NO, 0);
@@ -50,18 +50,28 @@ static void fillGradient(CGContextRef ctx, CGRect r, const CGFloat *c, size_t n)
 - (void)setRole:(NSString *)r { [role release]; role = [r copy]; [self setNeedsDisplay]; }
 - (void)setTimestamp:(NSString *)s { [timestamp release]; timestamp = [s copy]; [self setNeedsDisplay]; }
 
+// Every reload measures every row, and a streamed reply reloads per token, so measured sizes are remembered.
+static NSMutableDictionary *sizes = nil;
++ (void)forgetSizes { [sizes removeAllObjects]; }
 + (CGSize)textSize:(NSString *)t {
     NSString *s = [t length] ? t : @" ";
-    return [s sizeWithFont:[ORStyle messageFont] constrainedToSize:CGSizeMake(MAX_W - 2*PAD_X, 10000) lineBreakMode:UILineBreakModeWordWrap];
+    if (!sizes) { sizes = [[NSMutableDictionary alloc] init]; [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(forgetSizes) name:UIApplicationDidReceiveMemoryWarningNotification object:nil]; }
+    NSValue *v = [sizes objectForKey:s]; if (v) return [v CGSizeValue];
+    CGSize sz = [s sizeWithFont:[ORStyle messageFont] constrainedToSize:CGSizeMake(MAX_W - 2*PAD_X, 10000) lineBreakMode:UILineBreakModeWordWrap];
+    if ([sizes count] >= 200) [sizes removeAllObjects];   // the partial texts of a streamed reply would otherwise pile up
+    [sizes setObject:[NSValue valueWithCGSize:sz] forKey:s];
+    return sz;
 }
-+ (CGSize)imageDrawSize:(UIImage *)img {
-    if (!img) return CGSizeZero;
++ (CGSize)fitImageSize:(CGSize)s {
+    if (s.width <= 0 || s.height <= 0) return CGSizeZero;
     CGFloat maxW = MAX_W - 2*PAD_X, maxH = 180;
-    CGFloat f = MIN(maxW / img.size.width, maxH / img.size.height); if (f > 1) f = 1;
-    return CGSizeMake(floorf(img.size.width * f), floorf(img.size.height * f));
+    CGFloat f = MIN(maxW / s.width, maxH / s.height); if (f > 1) f = 1;
+    return CGSizeMake(floorf(s.width * f), floorf(s.height * f));
 }
-+ (CGFloat)heightForText:(NSString *)t image:(UIImage *)img timestamp:(BOOL)ts delivered:(BOOL)dl {
-    CGSize is = [self imageDrawSize:img];
++ (CGSize)imageDrawSize:(UIImage *)img { return img ? [self fitImageSize:img.size] : CGSizeZero; }
++ (CGFloat)heightForText:(NSString *)t image:(UIImage *)img timestamp:(BOOL)ts delivered:(BOOL)dl { return [self heightForText:t imageSize:(img ? img.size : CGSizeZero) timestamp:ts delivered:dl]; }
++ (CGFloat)heightForText:(NSString *)t imageSize:(CGSize)isz timestamp:(BOOL)ts delivered:(BOOL)dl {
+    CGSize is = [self fitImageSize:isz];
     CGFloat textH = [t length] ? [self textSize:t].height : 0;
     CGFloat inner = is.height + ((is.height > 0 && textH > 0) ? 6 : 0) + textH;
     return inner + 2*PAD_Y + 2*MARGIN_Y + (ts ? TS_H : 0) + (dl ? 16 : 0);

@@ -5,7 +5,9 @@
     NSDictionary *contact; NSString *historyKey;
     UITableView *table; UIView *inputBar; UITextField *input; UIButton *sendButton; UIButton *cameraButton;
     UIImage *attachedImage; NSString *attachedBase64;
-    NSMutableDictionary *imageCache;   // ts -> UIImage
+    NSMutableDictionary *imageCache;   // ts -> UIImage, for rows on screen; dropped on memory warnings and in the background
+    NSMutableDictionary *imageSizes;   // ts -> NSValue CGSize, so row heights never need the decoded photo
+    NSArray *visibleRows;              // [self visible], rebuilt on the next reload
     UIActivityIndicatorView *spinner;
     NSMutableArray *messages;    // dicts: role, content, ts, image?, hidden?, delivered?
     NSMutableString *pending;    // streaming assistant text not yet committed to a bubble
